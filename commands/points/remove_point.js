@@ -4,8 +4,8 @@ const config = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('add_point')
-        .setDescription('Add points to a user (Admin only)')
+        .setName('remove_point')
+        .setDescription('Remove points from a user (Admin only)')
         .addUserOption(option => 
             option.setName('target')
                 .setDescription('The user')
@@ -26,15 +26,16 @@ module.exports = {
 
         let userPoints = db.prepare('SELECT points FROM points WHERE userId = ?').get(target.id);
         
-        if (!userPoints) {
-            db.prepare('INSERT INTO points (userId, points) VALUES (?, ?)').run(target.id, amount);
-        } else {
-            db.prepare('UPDATE points SET points = points + ? WHERE userId = ?').run(amount, target.id);
+        if (!userPoints || userPoints.points < amount) {
+            const errorEmbed = new EmbedBuilder().setColor(config.colors.error || 'Red').setDescription(config.messages.notEnoughPoints || '❌ This user does not have enough points to remove.');
+            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
         }
+
+        db.prepare('UPDATE points SET points = points - ? WHERE userId = ?').run(amount, target.id);
 
         const successEmbed = new EmbedBuilder()
             .setColor(config.colors.success || 'Green')
-            .setDescription(config.messages.pointsAdded ? config.messages.pointsAdded.replace('{amount}', amount).replace('{user}', target.toString()) : `✅ Successfully added **${amount}** points to ${target}.`);
+            .setDescription(config.messages.pointsRemoved ? config.messages.pointsRemoved.replace('{amount}', amount).replace('{user}', target.toString()) : `✅ Successfully removed **${amount}** points from ${target}.`);
             
         await interaction.reply({ embeds: [successEmbed] });
     },
