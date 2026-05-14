@@ -1,0 +1,19 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "Discord Bot with Tickets, Points, and Admin commands",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js"
+  },
+  "dependencies": {
+    "@discordjs/voice": "^0.19.2",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5",
+    "opusscript": "^0.0.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "clientId": "1504218208335564960",
+  "guildId": "1504208048510472283",
+  "ticketCategoryId": "1504210459899728043",
+  "supportRoleId": "1504224006138630265",
+  "logChannelId": "1504268742614450176",
+  "welcomeChannelId": "1504210149995184129",
+  "autoRoleId": "1504210729614446692",
+  "joinToCreateChannelId": "1504208049756438671",
+  "joinToCreateCategoryId": "1504208049756438669",
+  "applyStatusChannelId": "1504289582043103232",
+  "autoReply": {
+    "triggerWord": "تقديم",
+    "allowedRoleId": "1504224006138630265",
+    "deleteOriginalMessage": true,
+    "response": "**📋 نموذج التقديم — Hells Bells**\n\n══════════════════════════\n\n**✦ الاسم الكامل:**\n> ...\n\n**✦ العمر:**\n> ...\n\n**✦ الجنسية:**\n> ...\n\n**✦ الخبرة في GTA:**\n> ...\n\n**✦ سبب انضمامك للعصابة:**\n> ...\n\n**✦ ماذا يمكنك تقديمه للعصابة:**\n> ...\n\n**✦ هل سبق أن كنت في عصابة؟ إذا نعم، أذكر اسمها وسبب المغادرة:**\n> ...\n\n══════════════════════════\n*قم بتعبئة النموذج كاملاً وأرسله هنا.*"
+  },
+  "colors": {
+    "primary": "#8B0000",
+    "success": "#57F287",
+    "error": "#ED4245",
+    "warning": "#FEE75C",
+    "dark": "#111111"
+  },
+  "ticketPanelImage": "https://media.discordapp.net/attachments/1504224125709844561/1504281178943787128/tickets.png?ex=6a066a85&is=6a051905&hm=72f34c4407fde89e27c92eb22515237c8edaf49ed010263f1201fd45ca1c79ef&=&format=webp&quality=lossless&width=1494&height=841",
+  "ticketEmbed": {
+    "title": "",
+    "description": "",
+    "color": "#8B0000",
+    "image": "",
+    "thumbnail": "",
+    "fields": [],
+    "author": {
+      "name": "",
+      "icon_url": ""
+    },
+    "footer": {
+      "text": "",
+      "icon_url": ""
+    },
+    "timestamp": false
+  },
+  "welcomeEmbed": {
+    "title": "👋 Welcome to {guild}!",
+    "description": "We're glad to have you here, {user}!\nYou are member #{memberCount}.",
+    "color": "#8B0000",
+    "image": "https://i.imgur.com/8QG46mK.gif",
+    "thumbnail": "",
+    "fields": [],
+    "author": {
+      "name": "",
+      "icon_url": ""
+    },
+    "footer": {
+      "text": "",
+      "icon_url": ""
+    },
+    "timestamp": false
+  },
+  "profileEmbed": {
+    "avatarTitle": "🖼️ {user}'s Avatar",
+    "profileTitle": "👤 ملف {user}",
+    "leaderboardTitle": "🏆 قائمة المتصدرين",
+    "unranked": "غير مصنف",
+    "profileLabels": {
+      "user": "العضو",
+      "points": "✨ النقاط",
+      "rank": "🏆 المرتبة"
+    }
+  },
+  "logEmbeds": {
+    "ticketClosedTitle": "🔒 تذكرة مغلقة",
+    "ticketCreatedTitle": "🎫 تذكرة جديدة",
+    "ticketAddedTitle": "👤 تمت إضافة عضو",
+    "ticketClaimedTitle": "✋ تم استلام التذكرة",
+    "ticketRenamedTitle": "✏️ تغيير اسم التذكرة",
+    "banTitle": "🚨 تم حظر عضو",
+    "kickTitle": "👢 تم طرد عضو",
+    "timeoutTitle": "⏱️ تم إسكات عضو",
+    "warnTitle": "⚠️ تحذير عضو",
+    "labels": {
+      "target": "العضو",
+      "moderator": "المشرف",
+      "reason": "السبب",
+      "duration": "المدة",
+      "ticketName": "اسم التذكرة",
+      "closedBy": "أُغلق بواسطة",
+      "addedUser": "العضو المضاف",
+      "claimedBy": "استلمه",
+      "oldName": "الاسم القديم",
+      "newName": "الاسم الجديد",
+      "createdBy": "فُتح بواسطة",
+      "buttonUsed": "النوع"
+    }
+  },
+  "messages": {
+    "noPermission": "❌ ليس لديك صلاحية لاستخدام هذا الأمر.",
+    "notATicket": "❌ هذه القناة ليست تذكرة مسجلة.",
+    "invalidAmount": "❌ الرجاء إدخال رقم أكبر من 0.",
+    "notEnoughPoints": "❌ هذا العضو لا يملك نقاطاً كافية.",
+    "userNotFound": "❌ لم يتم العثور على هذا العضو.",
+    "pointsAdded": "✅ تمت إضافة **{amount}** نقطة إلى {user} بنجاح.",
+    "pointsRemoved": "✅ تم خصم **{amount}** نقطة من {user} بنجاح.",
+    "ticketClaimed": "✅ تم استلام التذكرة بواسطة {user}.",
+    "ticketRenamed": "✅ تم تغيير اسم التذكرة إلى: **{name}**",
+    "userAddedToTicket": "✅ تمت إضافة {user} إلى التذكرة.",
+    "ticketClosing": "🔒 سيتم إغلاق التذكرة خلال 5 ثوانٍ...",
+    "alreadyHaveTicket": "❌ لديك تذكرة مفتوحة بالفعل في <#{channelId}>",
+    "ticketCreating": "⏳ جارٍ إنشاء تذكرتك...",
+    "ticketCreatedSuccess": "✅ تم إنشاء تذكرتك: {channel}",
+    "ticketCreationError": "❌ حدث خطأ أثناء إنشاء التذكرة.",
+    "banned": "🔨 تم حظر **{user}**.\n**السبب:** {reason}",
+    "kicked": "👢 تم طرد **{user}**.\n**السبب:** {reason}",
+    "timedOut": "⏱️ تم إسكات **{user}** لمدة {minutes} دقيقة.\n**السبب:** {reason}",
+    "noReason": "لا يوجد سبب",
+    "leaderboardEmpty": "لا يوجد أحد في قائمة المتصدرين بعد.",
+    "warned": "⚠️ تم تحذير **{user}**.\n**السبب:** {reason}\n**إجمالي التحذيرات:** {total}",
+    "warnCleared": "✅ تم مسح جميع تحذيرات {user}.",
+    "noWarnings": "✅ لا يوجد لدى هذا العضو أي تحذيرات.",
+    "warnNotFound": "❌ لم يتم العثور على هذا العضو في سجل التحذيرات."
+  },
+  "ticketButtons": [
+    {
+      "id": "apply",
+      "label": "تقديم طلب",
+      "emoji": "📥",
+      "style": "Secondary"
+    },
+    {
+      "id": "activation",
+      "label": "تفعيل عضو",
+      "emoji": "⚡",
+      "style": "Secondary"
+    }
+  ]
+}
