@@ -20,15 +20,11 @@ module.exports = {
         // ── Build announcement embed ────────────────────────────────────────
         const embed = new EmbedBuilder()
             .setColor(isOpen ? config.colors.success : config.colors.error)
-            .setTitle(isOpen ? '✅ Applications Are Now Open!' : '🔒 Applications Are Now Closed!')
-            .setDescription(
-                isOpen
-                    ? 'Recruitment is **open**! Head to the ticket channel and submit your application.'
-                    : 'Recruitment is **closed**. We are not accepting new applications at this time.\nCheck back later!'
-            )
+            .setTitle(isOpen ? config.messages.applyOpenTitle : config.messages.applyClosedTitle)
+            .setDescription(isOpen ? config.messages.applyOpenDesc : config.messages.applyClosedDesc)
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
             .setTimestamp()
-            .setFooter({ text: `Managed by ${interaction.user.tag}` });
+            .setFooter({ text: `بواسطة ${interaction.user.tag}` });
 
         // ── Send to the apply status channel ───────────────────────────────
         const channelId = config.applyStatusChannelId;
@@ -58,10 +54,15 @@ module.exports = {
 
         await target.send({ embeds: [embed] });
 
+        const statusText = isOpen ? 'مفتوح 🟢' : 'مغلق 🔴';
+        const replyMsg = config.messages.applyStatusSet
+            .replace('{status}', statusText)
+            .replace('{channel}', target.toString());
+
         await interaction.reply({
             embeds: [new EmbedBuilder()
                 .setColor(config.colors.success)
-                .setDescription(`✅ Application status set to **${isOpen ? 'OPEN 🟢' : 'CLOSED 🔴'}** — announcement sent to ${target}.`)
+                .setDescription(replyMsg)
             ],
             ephemeral: true
         });
