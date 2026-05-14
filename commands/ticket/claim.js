@@ -4,12 +4,8 @@ const config = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('add')
-        .setDescription('Add a user to the ticket (Support only)')
-        .addUserOption(option => 
-            option.setName('user')
-                .setDescription('The user to add')
-                .setRequired(true)),
+        .setName('claim')
+        .setDescription('Claim the ticket (Support only)'),
     async execute(interaction) {
         if (!interaction.member.roles.cache.has(config.supportRoleId) && !interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
             const errorEmbed = new EmbedBuilder().setColor(config.colors.error || 'Red').setDescription(config.messages.noPermission || '❌ You do not have permission to use this command.');
@@ -17,22 +13,18 @@ module.exports = {
         }
 
         const ticket = db.prepare('SELECT * FROM tickets WHERE channelId = ?').get(interaction.channel.id);
+        
         if (!ticket) {
             const errorEmbed = new EmbedBuilder().setColor(config.colors.error || 'Red').setDescription(config.messages.notATicket || '❌ This channel is not a registered ticket.');
             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
         }
 
-        const targetUser = interaction.options.getUser('user');
-
-        await interaction.channel.permissionOverwrites.edit(targetUser.id, {
-            ViewChannel: true,
-            SendMessages: true,
-            ReadMessageHistory: true
-        });
-
+        const oldName = interaction.channel.name;
+        await interaction.channel.setName(`claimed-${interaction.user.username}`);
+        
         const successEmbed = new EmbedBuilder()
             .setColor(config.colors.success || 'Green')
-            .setDescription(config.messages.userAddedToTicket ? config.messages.userAddedToTicket.replace('{user}', targetUser.toString()) : `✅ ${targetUser} has been added to the ticket.`);
+            .setDescription(config.messages.ticketClaimed ? config.messages.ticketClaimed.replace('{user}', interaction.user.toString()) : `✅ Ticket claimed by ${interaction.user}.`);
             
         await interaction.reply({ embeds: [successEmbed] });
 
@@ -42,12 +34,11 @@ module.exports = {
                 const logChannel = interaction.guild.channels.cache.get(config.logChannelId);
                 if (logChannel) {
                     const logEmbed = new EmbedBuilder()
-                        .setTitle(config.logEmbeds?.ticketAddedTitle || '👤 User Added to Ticket')
-                        .setColor(config.colors.primary || 'Blue')
+                        .setTitle(config.logEmbeds?.ticketClaimedTitle || '✋ Ticket Claimed')
+                        .setColor(config.colors.success || 'Green')
                         .addFields(
-                            { name: config.logEmbeds?.labels?.ticketName || 'Ticket', value: `${interaction.channel.name}`, inline: true },
-                            { name: config.logEmbeds?.labels?.addedUser || 'Added User', value: `${targetUser.tag}`, inline: true },
-                            { name: config.logEmbeds?.labels?.moderator || 'Moderator', value: `${interaction.user.tag}`, inline: true }
+                            { name: config.logEmbeds?.labels?.ticketName || 'Ticket', value: `${oldName}`, inline: true },
+                            { name: config.logEmbeds?.labels?.claimedBy || 'Claimed By', value: `${interaction.user.tag}`, inline: true }
                         )
                         .setTimestamp();
                     await logChannel.send({ embeds: [logEmbed] });

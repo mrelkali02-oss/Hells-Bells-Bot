@@ -4,11 +4,11 @@ const config = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('add')
-        .setDescription('Add a user to the ticket (Support only)')
-        .addUserOption(option => 
-            option.setName('user')
-                .setDescription('The user to add')
+        .setName('rename')
+        .setDescription('Rename the ticket (Support only)')
+        .addStringOption(option => 
+            option.setName('name')
+                .setDescription('The new ticket name')
                 .setRequired(true)),
     async execute(interaction) {
         if (!interaction.member.roles.cache.has(config.supportRoleId) && !interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
@@ -22,17 +22,13 @@ module.exports = {
             return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
         }
 
-        const targetUser = interaction.options.getUser('user');
-
-        await interaction.channel.permissionOverwrites.edit(targetUser.id, {
-            ViewChannel: true,
-            SendMessages: true,
-            ReadMessageHistory: true
-        });
-
+        const newName = interaction.options.getString('name');
+        const oldName = interaction.channel.name;
+        await interaction.channel.setName(newName);
+        
         const successEmbed = new EmbedBuilder()
             .setColor(config.colors.success || 'Green')
-            .setDescription(config.messages.userAddedToTicket ? config.messages.userAddedToTicket.replace('{user}', targetUser.toString()) : `✅ ${targetUser} has been added to the ticket.`);
+            .setDescription(config.messages.ticketRenamed ? config.messages.ticketRenamed.replace('{name}', newName) : `✅ Ticket renamed to: **${newName}**`);
             
         await interaction.reply({ embeds: [successEmbed] });
 
@@ -42,11 +38,11 @@ module.exports = {
                 const logChannel = interaction.guild.channels.cache.get(config.logChannelId);
                 if (logChannel) {
                     const logEmbed = new EmbedBuilder()
-                        .setTitle(config.logEmbeds?.ticketAddedTitle || '👤 User Added to Ticket')
+                        .setTitle(config.logEmbeds?.ticketRenamedTitle || '✏️ Ticket Renamed')
                         .setColor(config.colors.primary || 'Blue')
                         .addFields(
-                            { name: config.logEmbeds?.labels?.ticketName || 'Ticket', value: `${interaction.channel.name}`, inline: true },
-                            { name: config.logEmbeds?.labels?.addedUser || 'Added User', value: `${targetUser.tag}`, inline: true },
+                            { name: config.logEmbeds?.labels?.oldName || 'Old Name', value: `${oldName}`, inline: true },
+                            { name: config.logEmbeds?.labels?.newName || 'New Name', value: `${newName}`, inline: true },
                             { name: config.logEmbeds?.labels?.moderator || 'Moderator', value: `${interaction.user.tag}`, inline: true }
                         )
                         .setTimestamp();
