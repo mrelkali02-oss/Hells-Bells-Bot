@@ -3,25 +3,30 @@ const config = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('ban')
-        .setDescription('Ban a member from the server')
+        .setName('kick')
+        .setDescription('Kick a member from the server')
         .addUserOption(option => 
             option.setName('target')
-                .setDescription('The member to ban')
+                .setDescription('The member to kick')
                 .setRequired(true))
         .addStringOption(option => 
             option.setName('reason')
-                .setDescription('The reason for the ban'))
-        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+                .setDescription('The reason for the kick'))
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
     async execute(interaction) {
-        const target = interaction.options.getUser('target');
+        const target = interaction.options.getMember('target');
         const reason = interaction.options.getString('reason') ?? (config.messages.noReason || 'No reason provided');
 
-        await interaction.guild.members.ban(target, { reason });
+        if (!target) {
+            const errorEmbed = new EmbedBuilder().setColor(config.colors.error || 'Red').setDescription(config.messages.userNotFound || '❌ Could not find that member.');
+            return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+        }
+
+        await target.kick(reason);
         
         const successEmbed = new EmbedBuilder()
             .setColor(config.colors.success || 'Green')
-            .setDescription(config.messages.banned ? config.messages.banned.replace('{user}', target.tag).replace('{reason}', reason) : `🔨 **${target.tag}** has been banned.\n**Reason:** ${reason}`);
+            .setDescription(config.messages.kicked ? config.messages.kicked.replace('{user}', target.user.tag).replace('{reason}', reason) : `👢 **${target.user.tag}** has been kicked.\n**Reason:** ${reason}`);
             
         await interaction.reply({ embeds: [successEmbed] });
 
@@ -31,10 +36,10 @@ module.exports = {
                 const logChannel = interaction.guild.channels.cache.get(config.logChannelId);
                 if (logChannel) {
                     const logEmbed = new EmbedBuilder()
-                        .setTitle(config.logEmbeds?.banTitle || '🚨 Member Banned')
-                        .setColor(config.colors.error || 'Red')
+                        .setTitle(config.logEmbeds?.kickTitle || '👢 Member Kicked')
+                        .setColor(config.colors.warning || 'Yellow')
                         .addFields(
-                            { name: config.logEmbeds?.labels?.target || 'Target', value: `${target.tag} (${target.id})`, inline: true },
+                            { name: config.logEmbeds?.labels?.target || 'Target', value: `${target.user.tag} (${target.id})`, inline: true },
                             { name: config.logEmbeds?.labels?.moderator || 'Moderator', value: `${interaction.user.tag}`, inline: true },
                             { name: config.logEmbeds?.labels?.reason || 'Reason', value: reason }
                         )
